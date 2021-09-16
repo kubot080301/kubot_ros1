@@ -286,7 +286,22 @@ echo ""
 echo -e "\033[1;34m Please execute\033[1;36m source ~/.bashrc\033[1;34m to make the configure effective\033[1;34m"
 echo -e "\033[1;35m*****************************************************************\033[0m"
 
+# Content Source KUBOT workspace
+tput setaf 2
+echo "Content Source KUBOT workspace..."
+tput sgr0
+
+content="#source KUBOT workspace
+if [ ! -f ~/kubot_ros/ros_ws/devel/setup.bash ]; then 
+    echo \"please run cd ~/kubot_ros/ros_ws && catkin_make to compile kubot sdk\"
+else
+    source ~/kubot_ros/ros_ws/devel/setup.bash
+fi
+"
+echo "${content}" >> ~/.kubotrc
+
 # Export the Alias settings
+echo " " >>~/.kubotros1rc
 echo "alias kubot_bringup='roslaunch kubot_bringup bringup.launch'" >>~/.kubotros1rc
 echo "alias kubot_keyboard='roslaunch kubot_control keyboard_teleop.launch'" >>~/.kubotros1rc
 echo "alias kubot_robot='roslaunch kubot_bringup robot.launch'" >>~/.kubotros1rc
