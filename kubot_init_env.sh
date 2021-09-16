@@ -101,6 +101,7 @@ echo -e "\033[1;34m Please specify kubot robot model:\033[1;32m
     s3 : Sample There-Omni-Wheel-Omnidirectional-Model
     s4 : Sample Four-Omni-Wheel-Omnidirectional-Model
     s5 : Sample Four-Mecanum-Omnidirectional-Model
+    s6 : Sample Four-Ackermann-non-Holonomic-Model
 \033[1;34m (or other for user defined) \033[1;33m"
 
 read -p "" KUBOT_MODEL_INPUT
@@ -135,6 +136,9 @@ elif [ "$KUBOT_MODEL_INPUT" = "s4" ]; then
 elif [ "$KUBOT_MODEL_INPUT" = "s5" ]; then
     KUBOT_MODEL='4wd_mecanum'
     KUBOT_MODEL_TYPE='omni-corrected'
+elif [ "$KUBOT_MODEL_INPUT" = "s6" ]; then
+    KUBOT_MODEL='4wd_arkermann'
+    KUBOT_MODEL_TYPE='diff-corrected'
 else
     KUBOT_MODEL=$KUBOT_MODEL_INPUT
     KUBOT_MODEL_TYPE='diff-corrected'
