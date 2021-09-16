@@ -4,35 +4,48 @@
 # Information from:
 # http://wiki.ros.org/ROS/Installation/UbuntuMirrors
 
+# Check System Version
+tput setaf 2
+echo "Check System Version"
+tput sgr0
+
 SYS_VERSION=$(lsb_release -sc)
 SYS_KERNEL=$(arch)
-ROS_INSTALLED=1
 
-tput setaf 2
+tput setaf 3
 echo "System_Version:" $SYS_VERSION
 echo "System_Kernel:" $SYS_KERNEL
+tput sgr0
 
-if [ "$SYS_VERSION" = "bionic" ]; then
+# Check ROS1 Version
+tput setaf 2
+echo "Check ROS1 Version"
+tput sgr0
+
+tput setaf 3
+if [ "$SYS_VERSION" = "xenial"]; then
+    ROS_VERSION="kinetic"
+    echo "ROS_Version:" $ROS_VERSION
+elif [ "$SYS_VERSION" = "bionic" ]; then
     ROS_VERSION="melodic"
+    echo "ROS_Version:" $ROS_VERSION
+elif [ "$SYS_VERSION" = "focal" ]; then
+    ROS_VERSION="noetic"
     echo "ROS_Version:" $ROS_VERSION
 else
     echo -e "\033[1;31m KUBOT not support "$SYS_VERSION"\033[0m"
-    echo -e "\033[1;31m ROS not installed \033[0m"
-    ROS_INSTALLED=0
     exit
 fi
-
 tput sgr0
 
 # Let's start installing ROS!
-
 tput setaf 3
 echo "Let's start installing ROS1"
 tput sgr0
 
 if ["$ROS_INSTALLED" = 1]; then
 
-    #Adding repository and source list
+    # Adding repository and source list
     tput setaf 2
     echo "Adding repository and source list"
     tput sgr0

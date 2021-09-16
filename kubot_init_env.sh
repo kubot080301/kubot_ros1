@@ -1,43 +1,84 @@
 #!/bin/bash
+# Initialize the KUBOT robot and establish the environment required by kubot_ros1.
+# For more explanation, please see here: 
+# https://
 
 sudo ln -sf ~/kubot_ros1/kubot_init_env.sh /usr/bin/kubot_init_env
 sudo ln -sf ~/kubot_ros1/tools/kubot_view_env.sh /usr/bin/kubot_view_env
 
+# Build udev rulse
 if ! [ $KUBOT_ROS1_ENV_INITIALIZED ]; then
+    tput setaf 2
+    echo "Build udev rulse..."
+    tput sgr0
+
     cd ~/kubot_ros1/
     echo " " >>~/.bashrc
     echo "# Load KUBOT_ROS1's environment variables." >>~/.bashrc
     echo "export KUBOT_ROS1_ENV_INITIALIZED=1" >>~/.bashrc
     echo "source ~/.kubotros1rc" >>~/.bashrc
-    #rules
-    echo -e "\033[1;32m setup kubot modules"
-    echo " "
+
+    # Copy rules to /etc/udev
     sudo cp rules/71-kubot-driver-board.rules /etc/udev/rules.d/
     sudo cp rules/72-kubot-lidar.rules /etc/udev/rules.d/
     sudo cp rules/73-kubot-camera.rules /etc/udev/rules.d/
-    echo " "
-    echo "Restarting udev"
-    echo " "
 
+    # Restarting udev
     sudo udevadm control --reload-rules
     sudo udevadm trigger
 fi
 
+# Check System Version
+tput setaf 2
+echo "Check System Version..."
+tput sgr0
+
 SYS_VERSION=$(lsb_release -sc)
-if [ "$SYS_VERSION" = "bionic" ]; then
+SYS_KERNEL=$(arch)
+
+tput setaf 3
+echo "System_Version:" $SYS_VERSION
+echo "System_Kernel:" $SYS_KERNEL
+tput sgr0
+
+# Check ROS1 Version
+tput setaf 2
+echo "Check ROS1 Version..."
+tput sgr0
+
+tput setaf 3
+if [ "$SYS_VERSION" = "xenial" ]; then
+    ROS_VERSION="kinetic"
+    echo "ROS_Version:" $ROS_VERSION
+elif [ "$SYS_VERSION" = "bionic" ]; then
     ROS_VERSION="melodic"
+    echo "ROS_Version:" $ROS_VERSION
+elif [ "$SYS_VERSION" = "focal" ]; then
+    ROS_VERSION="noetic"
+    echo "ROS_Version:" $ROS_VERSION
 else
     echo -e "\033[1;31m KUBOT not support "$SYS_VERSION"\033[0m"
     exit
 fi
+tput sgr0
+
+# Content Source ROS1
+tput setaf 2
+echo "Content Source ROS1..."
+tput sgr0
 
 content="#source ros
 if [ ! -f /opt/ros/${ROS_VERSION}/setup.bash ]; then 
-    echo \"please run cd ~/kubot_ros && ./kubot_install_ros.sh to install ros sdk\"
+    echo \"please run cd ~/kubot_ros1/tools/kubot_installer/ && ./kubot_install_ros.sh to install ros sdk\"
 else
     source /opt/ros/${ROS_VERSION}/setup.bash
 fi"
 echo "${content}" >~/.kubotros1rc
+
+# Check Network IP
+tput setaf 2
+echo "Check Network IP..."
+tput sgr0
 
 LOCAL_IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/" '{print $1}')
 echo "LOCAL_IP=\`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print \$2}' | awk -F"/" '{print \$1}'\`" >>~/.kubotros1rc
@@ -47,6 +88,7 @@ if [ ! ${LOCAL_IP} ]; then
     exit
 fi
 
+# Specify KUBOT robot model
 echo -e "\033[1;34m Please specify kubot robot model:\033[1;32m
     1 : Kubot2(Cagebot)
     2 : Neuronbot2
@@ -54,11 +96,11 @@ echo -e "\033[1;34m Please specify kubot robot model:\033[1;32m
     4 : Aider
     5 : Galiray2
 
-    s1 : Simple Two-Wheel-Differential-Model
-    s2 : Simple Four-Whell-Differential-Model
-    s3 : Simple There-Omni-Wheel-Omnidirectional-Model
-    s4 : Simple Four-Omni-Wheel-Omnidirectional-Model
-    s5 : Simple Four-Mecanum-Omnidirectional-Model
+    s1 : Sample Two-Wheel-Differential-Model
+    s2 : Sample Four-Whell-Differential-Model
+    s3 : Sample There-Omni-Wheel-Omnidirectional-Model
+    s4 : Sample Four-Omni-Wheel-Omnidirectional-Model
+    s5 : Sample Four-Mecanum-Omnidirectional-Model
 \033[1;34m (or other for user defined) \033[1;33m"
 
 read -p "" KUBOT_MODEL_INPUT
@@ -98,6 +140,7 @@ else
     KUBOT_MODEL_TYPE='diff-corrected'
 fi
 
+# Specify KUBOT driver board
 echo -e "\033[1;34m Please specify kubot driver board type:\033[1;32m
     1 : arduino(mega2560)
     2 : teensy(teensy40)
@@ -120,6 +163,7 @@ else
     KUBOT_DRIVER_BAUDRATE=115200
 fi
 
+# Specify  KUBOT lidar
 echo -e "\033[1;34m Please specify  kubot lidar:\033[1;32m
     0 : not config
     1 : rplidar(a1)
@@ -166,6 +210,7 @@ else
     KUBOT_LIDAR=$KUBOT_LIDAR_INPUT
 fi
 
+# Specify  kubot camera
 echo -e "\033[1;34m Please specify  kubot camera:\033[1;32m
     0 : not config
     1 : xtion
@@ -200,6 +245,7 @@ else
     KUBOT_DEEP_CAM=0    
 fi
 
+# Specify  the current machine
 echo -e "\033[1;34m Please specify the current machine(ip:$LOCAL_IP) type\033[1;32m
     0 : Master 
     1 : Slaver
@@ -216,6 +262,7 @@ else
     ROS_MASTER_IP=$(echo $KUBOT_SLAVER_IP)
 fi
 
+# Export the settings in kubotros1rc
 echo "export KUBOT_MODEL=${KUBOT_MODEL}" >>~/.kubotros1rc
 echo "export KUBOT_MODEL_TYPE=${KUBOT_MODEL_TYPE}" >>~/.kubotros1rc
 echo "export KUBOT_BOARD=${KUBOT_BOARD}" >>~/.kubotros1rc
@@ -227,6 +274,7 @@ echo "export ROS_MASTER_URI=$(echo http://${ROS_MASTER_IP_STR}:11311)" >>~/.kubo
 echo "export ROS_IP=\`echo \$LOCAL_IP\`" >>~/.kubotros1rc
 echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >>~/.kubotros1rc
 
+# View current settings
 echo -e "\033[1;35m*****************************************************************"
 echo " KUBOT Robot Model:" $KUBOT_MODEL
 echo " Driver Board:" $KUBOT_BOARD
@@ -238,17 +286,7 @@ echo ""
 echo -e "\033[1;34m Please execute\033[1;36m source ~/.bashrc\033[1;34m to make the configure effective\033[1;34m"
 echo -e "\033[1;35m*****************************************************************\033[0m"
 
-content="#source kubot
-
-if [ ! -f ~/kubot_ros1/ros_ws/devel/setup.bash ]; then 
-    echo \"please run cd ~/kubot_ros1/ros_ws && catkin_make to compile kubot sdk\"
-else
-    source ~/kubot_ros1/ros_ws/devel/setup.bash
-fi
-"
-echo "${content}" >>~/.kubotros1rc
-
-#alias
+# Export the Alias settings
 echo "alias kubot_bringup='roslaunch kubot_bringup bringup.launch'" >>~/.kubotros1rc
 echo "alias kubot_keyboard='roslaunch kubot_control keyboard_teleop.launch'" >>~/.kubotros1rc
 echo "alias kubot_robot='roslaunch kubot_bringup robot.launch'" >>~/.kubotros1rc
@@ -262,6 +300,10 @@ echo "alias kubot_angular='rosrun kubot_control calibrate_angular.py'" >>~/.kubo
 echo "alias kubot_gmp='roslaunch kubot_slam_2d gmapping.launch'" >>~/.kubotros1rc
 echo "alias kubot_save_map='roslaunch kubot_navigation save_map.launch'" >>~/.kubotros1rc
 echo "alias kubot_view='roslaunch kubot_navigation view_nav.launch'" >>~/.kubotros1rc
+
+
+
+
 
 # tput setaf $Number
 # Red is 1
