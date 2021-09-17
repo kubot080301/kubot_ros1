@@ -93,7 +93,7 @@ if [ "$ROS_VERSION" = "melodic" ]; then
         sudo apt-get install ros-${ROS_VERSION}-desktop-full -y
     elif [ "$ROS_TOOL" = "2" ]; then
         sudo apt-get install ros-${ROS_VERSION}-desktop -y
-    elif [ "$ROS_TOOL" = "3"] ; then
+    elif [ "$ROS_TOOL" = "3"]; then
         sudo apt-get install ros-${ROS_VERSION}-base -y
     else
         sudo apt-get install ros-${ROS_VERSION}-base -y
@@ -119,9 +119,9 @@ if [ "$ROS_VERSION" = "melodic" ]; then
     echo "Installing rosinstall tools"
     tput sgr0
 
-    sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential -y
+    sudo apt-get install git python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 
-    tput setaf 3
+    tput setaf 2
     echo "Finish Install ROS1"
     tput sgr0
 else

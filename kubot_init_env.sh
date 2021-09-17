@@ -1,6 +1,6 @@
 #!/bin/bash
-# Initialize the KUBOT robot and establish the environment required by kubot_ros1.
-# For more explanation, please see here: 
+# Initialize KUBOT Robots setting and establish the environment required by kubot_ros1.
+# For more explanation, please see here:
 # https://
 
 sudo ln -sf ~/kubot_ros1/kubot_init_env.sh /usr/bin/kubot_init_env
@@ -89,12 +89,14 @@ if [ ! ${LOCAL_IP} ]; then
 fi
 
 # Specify KUBOT robot model
-echo -e "\033[1;34m Please specify kubot robot model:\033[1;32m
-    1 : Kubot2(Cagebot)
-    2 : Neuronbot2
-    3 : WAGV
-    4 : Aider
-    5 : Galiray2
+tput setaf 2
+echo "Please specify kubot robot model:"
+tput setaf 3
+echo "
+    1 : Kubot2 (Cagebot)
+    2 : Neuronbot2 (Adlink)
+    3 : WAGV (ShanYangYe)
+    4 : Aider (ShanYangYe)
 
     s1 : Sample Two-Wheel-Differential-Model
     s2 : Sample Four-Whell-Differential-Model
@@ -102,7 +104,8 @@ echo -e "\033[1;34m Please specify kubot robot model:\033[1;32m
     s4 : Sample Four-Omni-Wheel-Omnidirectional-Model
     s5 : Sample Four-Mecanum-Omnidirectional-Model
     s6 : Sample Four-Ackermann-non-Holonomic-Model
-\033[1;34m (or other for user defined) \033[1;33m"
+    "
+tput sgr0
 
 read -p "" KUBOT_MODEL_INPUT
 
@@ -118,26 +121,24 @@ elif [ "$KUBOT_MODEL_INPUT" = "3" ]; then
 elif [ "$KUBOT_MODEL_INPUT" = "4" ]; then
     KUBOT_MODEL='aider'
     KUBOT_MODEL_TYPE='diff-corrected'
-elif [ "$KUBOT_MODEL_INPUT" = "5" ]; then
-    KUBOT_MODEL='galiray2'
-    KUBOT_MODEL_TYPE='omni-corrected'
+
 elif [ "$KUBOT_MODEL_INPUT" = "s1" ]; then
-    KUBOT_MODEL='2wd_diff'
+    KUBOT_MODEL='s1_2wd_diff'
     KUBOT_MODEL_TYPE='diff-corrected'
 elif [ "$KUBOT_MODEL_INPUT" = "s2" ]; then
-    KUBOT_MODEL='4wd_diff'
+    KUBOT_MODEL='s2_4wd_diff'
     KUBOT_MODEL_TYPE='diff-corrected'
 elif [ "$KUBOT_MODEL_INPUT" = "s3" ]; then
-    KUBOT_MODEL='3wd_omni'
+    KUBOT_MODEL='s3_3wd_omni'
     KUBOT_MODEL_TYPE='omni-corrected'
 elif [ "$KUBOT_MODEL_INPUT" = "s4" ]; then
-    KUBOT_MODEL='4wd_omni'
+    KUBOT_MODEL='s4_4wd_omni'
     KUBOT_MODEL_TYPE='omni-corrected'
 elif [ "$KUBOT_MODEL_INPUT" = "s5" ]; then
-    KUBOT_MODEL='4wd_mecanum'
+    KUBOT_MODEL='s5_4wd_mecanum'
     KUBOT_MODEL_TYPE='omni-corrected'
 elif [ "$KUBOT_MODEL_INPUT" = "s6" ]; then
-    KUBOT_MODEL='4wd_arkermann'
+    KUBOT_MODEL='s6_4wd_arkermann'
     KUBOT_MODEL_TYPE='diff-corrected'
 else
     KUBOT_MODEL=$KUBOT_MODEL_INPUT
@@ -145,11 +146,15 @@ else
 fi
 
 # Specify KUBOT driver board
-echo -e "\033[1;34m Please specify kubot driver board type:\033[1;32m
-    1 : arduino(mega2560)
-    2 : teensy(teensy40)
-    3 : stm32(f103rc) 
-\033[1;34m (or other for user defined)\033[1;33m"
+tput setaf 2
+echo "Please specify kubot driver board type:"
+tput setaf 3
+echo "
+    1 : Arduino(mega2560)
+    2 : Teensy(teensy40)
+    3 : STM32(f103rc) 
+    "
+tput sgr0
 
 read -p "" KUBOT_DIRVER_BOARD_INPUT
 
@@ -168,7 +173,10 @@ else
 fi
 
 # Specify  KUBOT lidar
-echo -e "\033[1;34m Please specify  kubot lidar:\033[1;32m
+tput setaf 2
+echo "Please specify  kubot lidar:"
+tput setaf 3
+echo "
     0 : not config
     1 : rplidar(a1)
     2 : rplidar(a2)
@@ -182,7 +190,8 @@ echo -e "\033[1;34m Please specify  kubot lidar:\033[1;32m
     10 : hokuyo(ust-10lx)
 
     s1 : two_rplidar(a2)
-\033[1;34m (or other for user defined)\033[1;33m"
+    "
+tput sgr0
 
 read -p "" KUBOT_LIDAR_INPUT
 
@@ -208,6 +217,7 @@ elif [ "$KUBOT_LIDAR_INPUT" = "9" ]; then
     KUBOT_LIDAR='sick-tim551'
 elif [ "$KUBOT_LIDAR_INPUT" = "10" ]; then
     KUBOT_LIDAR='hokuyo-10ls'
+
 elif [ "$KUBOT_LIDAR_INPUT" = "s1" ]; then
     KUBOT_LIDAR='two-rplidar-a2'
 else
@@ -215,55 +225,69 @@ else
 fi
 
 # Specify  kubot camera
-echo -e "\033[1;34m Please specify  kubot camera:\033[1;32m
+tput setaf 2
+echo "Please specify  kubot camera:"
+tput setaf 3
+echo "
     0 : not config
     1 : xtion
     2 : astra
     3 : kinectV2
     4 : intel realsense(d435i)
     5 : logitech(c615)
-\033[1;34m (or other for user defined) \033[1;33m"
+    "
+tput sgr0
 
 read -p "" KUBOT_CAMERA_INPUT
 
 if [ "$KUBOT_CAMERA_INPUT" = "0" ]; then
     KUBOT_CAMERA='non-camera'
-    KUBOT_DEEP_CAM=0 
+    KUBOT_DEEP_CAM=0
 elif [ "$KUBOT_CAMERA_INPUT" = "1" ]; then
     KUBOT_CAMERA='xtion'
-    KUBOT_DEEP_CAM=1    
+    KUBOT_DEEP_CAM=1
 elif [ "$KUBOT_CAMERA_INPUT" = "2" ]; then
     KUBOT_CAMERA='astra'
-    KUBOT_DEEP_CAM=1    
+    KUBOT_DEEP_CAM=1
 elif [ "$KUBOT_CAMERA_INPUT" = "3" ]; then
     KUBOT_CAMERA='kinectV2'
-    KUBOT_DEEP_CAM=1 
+    KUBOT_DEEP_CAM=1
 elif [ "$KUBOT_CAMERA_INPUT" = "4" ]; then
     KUBOT_CAMERA='d435i'
-    KUBOT_DEEP_CAM=1 
+    KUBOT_DEEP_CAM=1
 elif [ "$KUBOT_CAMERA_INPUT" = "5" ]; then
     KUBOT_CAMERA='logi-c615'
-    KUBOT_DEEP_CAM=0     
+    KUBOT_DEEP_CAM=0
 else
     KUBOT_CAMERA=$KUBOT_CAMERA_INPUT
-    KUBOT_DEEP_CAM=0    
+    KUBOT_DEEP_CAM=0
 fi
 
 # Specify  the current machine
-echo -e "\033[1;34m Please specify the current machine(ip:$LOCAL_IP) type\033[1;32m
+tput setaf 2
+echo "Please specify the current machine(ip:$LOCAL_IP) type:"
+tput setaf 3
+echo "
     0 : Master 
     1 : Slaver
-\033[1;33m"
+    "
+tput sgr0
 
 read -p "" KUBOT_MACHINE_VALUE
 if [ "$KUBOT_MACHINE_VALUE" = "0" ]; then
+    tput setaf 3
     ROS_MASTER_IP_STR="\`echo \$LOCAL_IP\`"
     ROS_MASTER_IP=$(echo $LOCAL_IP)
+    tput sgr0
 else
-    echo -e "\033[1;34m Plase specify the robot_ip for commnication:\033[1;33m"
+    tput setaf 2
+    echo "Plase specify the robot_ip for commnication:"
+    tput setaf 7
     read -p "" KUBOT_SLAVER_IP
+    tput setaf 3
     ROS_MASTER_IP_STR=$(echo $KUBOT_SLAVER_IP)
     ROS_MASTER_IP=$(echo $KUBOT_SLAVER_IP)
+    tput sgr0
 fi
 
 # Export the settings in kubotros1rc
@@ -279,7 +303,9 @@ echo "export ROS_IP=\`echo \$LOCAL_IP\`" >>~/.kubotros1rc
 echo "export ROS_HOSTNAME=\`echo \$LOCAL_IP\`" >>~/.kubotros1rc
 
 # View current settings
-echo -e "\033[1;35m*****************************************************************"
+tput setaf 5
+echo "*****************************************************************"
+tput setaf 4
 echo " KUBOT Robot Model:" $KUBOT_MODEL
 echo " Driver Board:" $KUBOT_BOARD
 echo " Lidar:" $KUBOT_LIDAR
@@ -287,8 +313,10 @@ echo " Camera:" $KUBOT_3DSENSOR
 echo " ros1_local_ip:" ${LOCAL_IP}
 echo " ros1_robot_ip:" ${ROS_MASTER_IP}
 echo ""
-echo -e "\033[1;34m Please execute\033[1;36m source ~/.bashrc\033[1;34m to make the configure effective\033[1;34m"
-echo -e "\033[1;35m*****************************************************************\033[0m"
+tput setaf 3
+echo "Please execute source ~/.bashrc to make the configure effective."
+tput setaf 5
+echo "*****************************************************************"
 
 # Content Source KUBOT workspace
 tput setaf 2
@@ -302,7 +330,7 @@ else
     source ~/kubot_ros/ros_ws/devel/setup.bash
 fi
 "
-echo "${content}" >> ~/.kubotrc
+echo "${content}" >>~/.kubotrc
 
 # Export the Alias settings
 echo " " >>~/.kubotros1rc
@@ -320,9 +348,10 @@ echo "alias kubot_gmp='roslaunch kubot_slam_2d gmapping.launch'" >>~/.kubotros1r
 echo "alias kubot_save_map='roslaunch kubot_navigation save_map.launch'" >>~/.kubotros1rc
 echo "alias kubot_view='roslaunch kubot_navigation view_nav.launch'" >>~/.kubotros1rc
 
-
-
-
+# Finish Initialize kubot_ros1
+tput setaf 2
+echo "Finish Initialize kubot_ros1!"
+tput sgr0
 
 # tput setaf $Number
 # Red is 1
