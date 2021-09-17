@@ -363,3 +363,5 @@ tput sgr0
 # White is 7
 # Gray is 8
 # Reset is sgr0
+
+# KUBOT_ROS1
