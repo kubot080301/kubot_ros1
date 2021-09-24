@@ -2,6 +2,6 @@
 
 /usr/bin/kubot-stop
 sleep 2
-/usr/bin/kubot-start 
+/usr/bin/kubot-start
 
 # KUBOT_ROS1

@@ -93,8 +93,6 @@ if [ "$ROS_VERSION" = "melodic" ]; then
         sudo apt-get install ros-${ROS_VERSION}-desktop-full -y
     elif [ "$ROS_TOOL" = "2" ]; then
         sudo apt-get install ros-${ROS_VERSION}-desktop -y
-    elif [ "$ROS_TOOL" = "3"]; then
-        sudo apt-get install ros-${ROS_VERSION}-base -y
     else
         sudo apt-get install ros-${ROS_VERSION}-base -y
     fi

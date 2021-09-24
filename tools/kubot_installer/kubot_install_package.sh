@@ -9,15 +9,18 @@ tput sgr0
 tput setaf 3
 if [ "$SYS_VERSION" = "xenial" ]; then
     ROS_VERSION="kinetic"
-    echo "ROS_VERSION:" $ROS_VERSION
+    echo "ROS_Version:" $ROS_VERSION
 elif [ "$SYS_VERSION" = "bionic" ]; then
     ROS_VERSION="melodic"
-    echo "ROS_VERSION:" $ROS_VERSION
+    echo "ROS_Version:" $ROS_VERSION
 elif [ "$SYS_VERSION" = "focal" ]; then
     ROS_VERSION="noetic"
-    echo "ROS_VERSION:" $ROS_VERSION
+    echo "ROS_Version:" $ROS_VERSION
 else
-    echo -e "\033[1;31m KUBOT not support "$SYS_VERSION"\033[0m"
+    tput setaf 1
+    echo "KUBOT not support "$SYS_VERSION" system !"
+    tput sgr0
+
     exit
 fi
 tput sgr0
@@ -48,17 +51,17 @@ echo "Install KUBOT ROS1 Package dependencies..."
 tput sgr0
 
 sudo apt-get -y --allow-unauthenticated install ros-${ROS_VERSION}-ros-base \
-    ros-${ROS_VERSION}-slam-gmapping \ 
-    ros-${ROS_VERSION}-navigation \ 
-    ros-${ROS_VERSION}-xacro \ 
-    ros-${ROS_VERSION}-laser-filters \ 
-    ros-${ROS_VERSION}-robot-state-publisher \ 
-    ros-${ROS_VERSION}-joint-state-publisher \ 
-    ros-${ROS_VERSION}-joint-state-publisher-gui \ 
-    ros-${ROS_VERSION}-teleop-twist-* \ 
-    ros-${ROS_VERSION}-control-msgs \ 
-    ros-${ROS_VERSION}-kdl-parser-py \ 
-    ros-${ROS_VERSION}-tf2-geometry-msgs \ 
+    ros-${ROS_VERSION}-slam-gmapping \
+    ros-${ROS_VERSION}-navigation \
+    ros-${ROS_VERSION}-xacro \
+    ros-${ROS_VERSION}-laser-filters \
+    ros-${ROS_VERSION}-robot-state-publisher \
+    ros-${ROS_VERSION}-joint-state-publisher \
+    ros-${ROS_VERSION}-joint-state-publisher-gui \
+    ros-${ROS_VERSION}-teleop-twist-* \
+    ros-${ROS_VERSION}-control-msgs \
+    ros-${ROS_VERSION}-kdl-parser-py \
+    ros-${ROS_VERSION}-tf2-geometry-msgs \
     ros-${ROS_VERSION}-usb-cam \
     ros-${ROS_VERSION}-image-transport \
     ros-${ROS_VERSION}-image-transport-plugins \
@@ -66,24 +69,24 @@ sudo apt-get -y --allow-unauthenticated install ros-${ROS_VERSION}-ros-base \
     ros-${ROS_VERSION}-openni2* \
     ros-${ROS_VERSION}-freenect-* \
     ros-${ROS_VERSION}-robot-upstart \
-    ros-${ROS_VERSION}-tf-conversions \ 
-    ros-${ROS_VERSION}-orocos-kdl \ 
+    ros-${ROS_VERSION}-tf-conversions \
+    ros-${ROS_VERSION}-orocos-kdl \
     ros-${ROS_VERSION}-camera-umd \
     ros-${ROS_VERSION}-libuvc* \
     ros-${ROS_VERSION}-camera-calibration \
-    ros-${ROS_VERSION}-timed-roslaunch \ 
+    ros-${ROS_VERSION}-timed-roslaunch \
     ros-${ROS_VERSION}-web-video-server \
     ros-${ROS_VERSION}-robot-pose-ekf \
-    ros-${ROS_VERSION}-ira-laser-tools
+    ros-${ROS_VERSION}-ira-laser-tools \
     ros-${ROS_VERSION}-yocs-velocity-smoother \
-    ros-${ROS_VERSION}-slam-karto  \ 
-    ros-${ROS_VERSION}-hector-mapping \ 
-    ros-${ROS_VERSION}-hector-geotiff  \ 
-    ros-${ROS_VERSION}-hector-trajectory-server \ 
+    ros-${ROS_VERSION}-slam-karto \
+    ros-${ROS_VERSION}-hector-mapping \
+    ros-${ROS_VERSION}-hector-geotiff \
+    ros-${ROS_VERSION}-hector-trajectory-server \
     ros-${ROS_VERSION}-realsense2-camera \
-	ros-${ROS_VERSION}-rtabmap* \
-	ros-${ROS_VERSION}-cartographer-ros \ 
-	ros-${ROS_VERSION}-cartographer-rviz 
+    ros-${ROS_VERSION}-rtabmap* \
+    ros-${ROS_VERSION}-cartographer-ros \
+    ros-${ROS_VERSION}-cartographer-rviz
 
 cd ~/kubot_ros1/ros_ws/
 rosdep update

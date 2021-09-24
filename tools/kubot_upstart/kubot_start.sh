@@ -7,7 +7,7 @@ echo "Setting upstart log..."
 tput sgr0
 
 log_file=/tmp/kubot-upstart.log
-echo "$DATE: kubot-start" >> $log_file
+echo "$DATE: kubot-start" >>$log_file
 kubotenv=/etc/kubotenv
 . $kubotenv
 
@@ -40,7 +40,10 @@ elif [ "$SYS_VERSION" = "focal" ]; then
     ROS_VERSION="noetic"
     echo "ROS_Version:" $ROS_VERSION
 else
-    echo -e "\033[1;31m KUBOT not support "$SYS_VERSION"\033[0m"
+    tput setaf 1
+    echo "KUBOT not support "$SYS_VERSION" system !"
+    tput sgr0
+
     exit
 fi
 tput sgr0
@@ -50,24 +53,25 @@ tput setaf 2
 echo "Setting KUBOT Initialize to log file..."
 tput sgr0
 
-LOCAL_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/" '{print $1}'`
+LOCAL_IP=$(ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | awk -F"/" '{print $1}')
 echo $LOCAL_IP
 
-echo "KUBOT_MODEL:             $KUBOT_MODEL" >> $log_file
-echo "KUBOT_MODEL_TYPE:        $KUBOT_MODEL_TYPE" >> $log_file
-echo "KUBOT_BOARD:             $KUBOT_BOARD" >> $log_file
-echo "KUBOT_DRIVER_BAUDRATE:   $KUBOT_DRIVER_BAUDRATE" >> $log_file
-echo "KUBOT_LIDAR:             $KUBOT_LIDAR" >> $log_file
-echo "KUBOT_CAMERA:	           $KUBOT_CAMERA" >> $log_file
-echo "KUBOT_DEEP_CAM:          $KUBOT_DEEP_CAM" >> $log_file
-echo "SYS_VERSION:             $SYS_VERSION" >> $log_file
-echo "ROS_VERSION:             $ROS_VERSION" >> $log_file
-echo "ROS_HOSTNAME:            $ROS_HOSTNAME" >> $log_file
-echo "LOCAL_IP:                $LOCAL_IP" >> $log_file
-echo "ROS_MASTER_URI:          $ROS_MASTER_URI" >> $log_file
-echo "ROS_IP:                  $ROS_IP" >> $log_file
+echo "LOCAL_IP:                $LOCAL_IP" >>$log_file
+echo "SYS_VERSION:             $SYS_VERSION" >>$log_file
+echo "SYS_KERNEL:             $SYS_VERSION" >>$log_file
+echo "ROS_VERSION:             $ROS_VERSION" >>$log_file
+echo "KUBOT_MODEL:             $KUBOT_MODEL" >>$log_file
+echo "KUBOT_MODEL_TYPE:        $KUBOT_MODEL_TYPE" >>$log_file
+echo "KUBOT_BOARD:             $KUBOT_BOARD" >>$log_file
+echo "KUBOT_DRIVER_BAUDRATE:   $KUBOT_DRIVER_BAUDRATE" >>$log_file
+echo "KUBOT_LIDAR:             $KUBOT_LIDAR" >>$log_file
+echo "KUBOT_CAMERA:	           $KUBOT_CAMERA" >>$log_file
+echo "KUBOT_DEEP_CAM:          $KUBOT_DEEP_CAM" >>$log_file
+echo "ROS_MASTER_URI:          $ROS_MASTER_URI" >>$log_file
+echo "ROS_IP:                  $ROS_IP" >>$log_file
+echo "ROS_HOSTNAME:            $ROS_HOSTNAME" >>$log_file
 
-# add launch file
+# Add launch file
 roslaunch kubot_slam_2d gmapping_with_robot.launch
 
 # Finish

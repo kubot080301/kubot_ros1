@@ -3,6 +3,9 @@ source /opt/ros/melodic/setup.bash
 
 LOCAL_IP=192.168.5.1
 
+export SYS_VERSION=bionic
+export SYS_KERNEL=x86_64
+export ROS_VERSION=melodic
 export KUBOT_MODEL=kubot2
 export KUBOT_MODEL_TYPE=diff-corrected
 export KUBOT_BOARD=arduino-mega
@@ -10,8 +13,6 @@ export KUBOT_DRIVER_BAUDRATE=115200
 export KUBOT_LIDAR=rplidar-a1
 export KUBOT_CAMERA=non-3dsensor
 export KUBOT_DEEP_CAM=0
-export SYS_VERSION=bionic
-export ROS_VERSION=melodic
 export ROS_MASTER_URI=http://$LOCAL_IP:11311
 export ROS_IP=$LOCAL_IP
 export ROS_HOSTNAME=$LOCAL_IP
