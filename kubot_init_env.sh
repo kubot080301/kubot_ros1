@@ -1,32 +1,10 @@
 #!/bin/bash
 # Initialize KUBOT Robots setting and establish the environment required by kubot_ros1.
-# For more explanation, please see here:
+# For more explanation, please read here:
 # https://
 
 sudo ln -sf ~/kubot_ros1/kubot_init_env.sh /usr/bin/kubot_init_env
 sudo ln -sf ~/kubot_ros1/tools/kubot_view_env.sh /usr/bin/kubot_view_env
-
-# Build udev rulse
-if ! [ $KUBOT_ROS1_ENV_INITIALIZED ]; then
-    tput setaf 2
-    echo "Build udev rulse..."
-    tput sgr0
-
-    cd ~/kubot_ros1/
-    echo " " >>~/.bashrc
-    echo "# Load KUBOT_ROS1's environment variables." >>~/.bashrc
-    echo "export KUBOT_ROS1_ENV_INITIALIZED=1" >>~/.bashrc
-    echo "source ~/.kubotros1rc" >>~/.bashrc
-
-    # Copy rules to /etc/udev
-    sudo cp rules/71-kubot-driver-board.rules /etc/udev/rules.d/
-    sudo cp rules/72-kubot-lidar.rules /etc/udev/rules.d/
-    sudo cp rules/73-kubot-camera.rules /etc/udev/rules.d/
-
-    # Restarting udev
-    sudo udevadm control --reload-rules
-    sudo udevadm trigger
-fi
 
 # Check System Version
 tput setaf 2
@@ -57,7 +35,10 @@ elif [ "$SYS_VERSION" = "focal" ]; then
     ROS_VERSION="noetic"
     echo "ROS_Version:" $ROS_VERSION
 else
-    echo -e "\033[1;31m KUBOT not support "$SYS_VERSION"\033[0m"
+    tput setaf 1
+    echo "KUBOT not support "$SYS_VERSION" system !"
+    tput sgr0
+
     exit
 fi
 tput sgr0
@@ -74,6 +55,28 @@ else
     source /opt/ros/${ROS_VERSION}/setup.bash
 fi"
 echo "${content}" >~/.kubotros1rc
+
+# Build udev rulse
+if ! [ $KUBOT_ROS1_ENV_INITIALIZED ]; then
+    tput setaf 2
+    echo "Build udev rulse..."
+    tput sgr0
+
+    cd ~/kubot_ros1/
+    echo " " >>~/.bashrc
+    echo "# Load KUBOT_ROS1's environment variables." >>~/.bashrc
+    echo "export KUBOT_ROS1_ENV_INITIALIZED=1" >>~/.bashrc
+    echo "source ~/.kubotros1rc" >>~/.bashrc
+
+    # Copy rules to /etc/udev
+    sudo cp rules/71-kubot-driver-board.rules /etc/udev/rules.d/
+    sudo cp rules/72-kubot-lidar.rules /etc/udev/rules.d/
+    sudo cp rules/73-kubot-camera.rules /etc/udev/rules.d/
+
+    # Restarting udev
+    sudo udevadm control --reload-rules
+    sudo udevadm trigger
+fi
 
 # Check Network IP
 tput setaf 2
@@ -141,8 +144,11 @@ elif [ "$KUBOT_MODEL_INPUT" = "s6" ]; then
     KUBOT_MODEL='s6_4wd_arkermann'
     KUBOT_MODEL_TYPE='diff-corrected'
 else
-    KUBOT_MODEL=$KUBOT_MODEL_INPUT
-    KUBOT_MODEL_TYPE='diff-corrected'
+    tput setaf 1
+    echo "Input ERROR, KUBOT not support "$KUBOT_MODEL_INPUT" !"
+    tput sgr0
+
+    exit
 fi
 
 # Specify KUBOT driver board
@@ -168,8 +174,11 @@ elif [ "$KUBOT_DIRVER_BOARD_INPUT" = "3" ]; then
     KUBOT_BOARD='stm32f103'
     KUBOT_DRIVER_BAUDRATE=115200
 else
-    KUBOT_BOARD=$KUBOT_DIRVER_BOARD_INPUT
-    KUBOT_DRIVER_BAUDRATE=115200
+    tput setaf 1
+    echo "Input ERROR, KUBOT not support "$KUBOT_DIRVER_BOARD_INPUT" !"
+    tput sgr0
+
+    exit
 fi
 
 # Specify  KUBOT lidar
@@ -221,7 +230,11 @@ elif [ "$KUBOT_LIDAR_INPUT" = "10" ]; then
 elif [ "$KUBOT_LIDAR_INPUT" = "s1" ]; then
     KUBOT_LIDAR='two-rplidar-a2'
 else
-    KUBOT_LIDAR=$KUBOT_LIDAR_INPUT
+    tput setaf 1
+    echo "Input ERROR, KUBOT not support "$KUBOT_LIDAR_INPUT" !"
+    tput sgr0
+
+    exit
 fi
 
 # Specify  kubot camera
@@ -259,8 +272,11 @@ elif [ "$KUBOT_CAMERA_INPUT" = "5" ]; then
     KUBOT_CAMERA='logi-c615'
     KUBOT_DEEP_CAM=0
 else
-    KUBOT_CAMERA=$KUBOT_CAMERA_INPUT
-    KUBOT_DEEP_CAM=0
+    tput setaf 1
+    echo "Input ERROR, KUBOT not support "$KUBOT_CAMERA_INPUT" !"
+    tput sgr0
+
+    exit
 fi
 
 # Specify  the current machine
@@ -291,6 +307,9 @@ else
 fi
 
 # Export the settings in kubotros1rc
+echo "export SYSTEM_VERSION=${SYS_VERSION}" >>~/.kubotros1rc
+echo "export SYSTEM_KERNEL=${SYS_KERNEL}" >>~/.kubotros1rc
+echo "export ROS_VERSION=${ROS_VERSION}" >>~/.kubotros1rc
 echo "export KUBOT_MODEL=${KUBOT_MODEL}" >>~/.kubotros1rc
 echo "export KUBOT_MODEL_TYPE=${KUBOT_MODEL_TYPE}" >>~/.kubotros1rc
 echo "export KUBOT_BOARD=${KUBOT_BOARD}" >>~/.kubotros1rc
@@ -352,16 +371,5 @@ echo "alias kubot_view='roslaunch kubot_navigation view_nav.launch'" >>~/.kubotr
 tput setaf 2
 echo "Finish Initialize kubot_ros1!"
 tput sgr0
-
-# tput setaf $Number
-# Red is 1
-# Green is 2
-# Yallow is 3
-# Blue is 4
-# Purple is 5
-# Cyan-blue is 6
-# White is 7
-# Gray is 8
-# Reset is sgr0
 
 # KUBOT_ROS1
