@@ -58,7 +58,7 @@ echo $LOCAL_IP
 
 echo "LOCAL_IP:                $LOCAL_IP" >>$log_file
 echo "SYS_VERSION:             $SYS_VERSION" >>$log_file
-echo "SYS_KERNEL:             $SYS_VERSION" >>$log_file
+echo "SYS_KERNEL:              $SYS_VERSION" >>$log_file
 echo "ROS_VERSION:             $ROS_VERSION" >>$log_file
 echo "KUBOT_MODEL:             $KUBOT_MODEL" >>$log_file
 echo "KUBOT_MODEL_TYPE:        $KUBOT_MODEL_TYPE" >>$log_file
