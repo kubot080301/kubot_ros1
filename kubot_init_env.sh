@@ -183,7 +183,7 @@ fi
 
 # Specify  KUBOT lidar
 tput setaf 2
-echo "Please specify  kubot lidar:"
+echo "Please specify kubot lidar:"
 tput setaf 3
 echo "
     0 : not config
@@ -239,7 +239,7 @@ fi
 
 # Specify  kubot camera
 tput setaf 2
-echo "Please specify  kubot camera:"
+echo "Please specify kubot camera:"
 tput setaf 3
 echo "
     0 : not config
