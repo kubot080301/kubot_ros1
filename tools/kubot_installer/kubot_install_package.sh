@@ -1,6 +1,19 @@
 #!/bin/bash
 # Clone ALL KUBOT Robot ROS1 Package and ROS1 dependencies.
 
+# Check System Version
+tput setaf 2
+echo "Check System Version..."
+tput sgr0
+
+SYS_VERSION=$(lsb_release -sc)
+SYS_KERNEL=$(arch)
+
+tput setaf 3
+echo "System_Version:" $SYS_VERSION
+echo "System_Kernel:" $SYS_KERNEL
+tput sgr0
+
 # Check ROS1 Version
 tput setaf 2
 echo "Check ROS1 Version..."
