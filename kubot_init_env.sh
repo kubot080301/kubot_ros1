@@ -3,21 +3,18 @@
 # For more explanation, please read here:
 # https://
 
-sudo ln -sf ~/kubot_ros1/kubot_init_env.sh /usr/bin/kubot_init_env
-sudo ln -sf ~/kubot_ros1/tools/kubot_view_env.sh /usr/bin/kubot_view_env
+SCRIPT_DIR=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+SCRIPT_NAME=$(basename ${BASH_SOURCE[0]})
+source $SCRIPT_DIR/tools/kubot_installer/bash_utils.sh
+
+# sudo ln -sf ~/kubot_ros1/kubot_init_env.sh /usr/bin/kubot_init_env
+# sudo ln -sf ~/kubot_ros1/tools/kubot_view_env.sh /usr/bin/kubot_view_env
 
 # Check System Version
-tput setaf 2
-echo "Check System Version..."
-tput sgr0
+echo_green "Check System Version..."
 
-SYS_VERSION=$(lsb_release -sc)
-SYS_KERNEL=$(arch)
-
-tput setaf 3
-echo "System_Version:" $SYS_VERSION
-echo "System_Kernel:" $SYS_KERNEL
-tput sgr0
+source $SCRIPT_DIR/tools/kubot_installer/check_release.sh
+source $SCRIPT_DIR/tools/kubot_installer/check_arch.sh
 
 # Check ROS1 Version
 tput setaf 2
@@ -97,7 +94,7 @@ echo "Please specify kubot robot model:"
 tput setaf 3
 echo "
     1 : Kubot2 (Cagebot)
-    2 : Neuronbot2 (Adlink)
+    2 : Neuronbot2 (ADLINK)
     3 : WAGV (ShanYangYe)
     4 : Aider (ShanYangYe)
 
