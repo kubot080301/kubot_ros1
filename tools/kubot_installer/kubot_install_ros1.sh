@@ -52,7 +52,7 @@ sudo apt-add-repository universe
 sudo apt-add-repository multiverse
 sudo apt-add-repository restricted
 
-if [ "$ROS_VERSION" = "melodic" ]; then
+if [ "$ROS_VERSION" = "melodic" ] || [ "$ROS_VERSION" = "noetic" ] ; then
 
     # Setup sources.lst
     tput setaf 2
@@ -94,7 +94,7 @@ if [ "$ROS_VERSION" = "melodic" ]; then
     elif [ "$ROS_TOOL" = "2" ]; then
         sudo apt-get install ros-${ROS_VERSION}-desktop -y
     else
-        sudo apt-get install ros-${ROS_VERSION}-base -y
+        sudo apt-get install ros-${ROS_VERSION}-ros-base -y
     fi
 
     # Initialize rosdep
@@ -102,7 +102,14 @@ if [ "$ROS_VERSION" = "melodic" ]; then
     echo "Installing rosdep"
     tput sgr0
 
-    sudo apt-get install python-rosdep -y
+    if [ "$ROS_VERSION" = "melodic" ]; then
+        sudo apt-get install git python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential -y
+    elif [ "$ROS_VERSION" = "noetic" ]; then
+        sudo apt-get install git python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y
+    else
+        exit
+        echo "error"
+    fi
 
     # Initialize rosdep
     tput setaf 2
@@ -112,16 +119,14 @@ if [ "$ROS_VERSION" = "melodic" ]; then
     sudo rosdep init
     rosdep update
 
-    # Install rosinstall
-    tput setaf 2
-    echo "Installing rosinstall tools"
-    tput sgr0
-
-    sudo apt-get install git python-rosinstall python-rosinstall-generator python-wstool build-essential -y
-
+    # Finish Install ROS1
     tput setaf 2
     echo "Finish Install ROS1"
     tput sgr0
+
+    echo "source /opt/ros/${ROS_VERSION}/setup.bash" >> ~/.bashrc
+    source ~/.bashrc
+    
 else
     exit
 fi
