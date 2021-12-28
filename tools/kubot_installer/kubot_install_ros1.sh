@@ -67,7 +67,8 @@ if [ "$ROS_VERSION" = "melodic" ] || [ "$ROS_VERSION" = "noetic" ] ; then
     fi
 
     # Setup keys
-    sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+    sudo apt install curl 
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
     # Updating apt-get
     tput setaf 2
@@ -108,7 +109,6 @@ if [ "$ROS_VERSION" = "melodic" ] || [ "$ROS_VERSION" = "noetic" ] ; then
         sudo apt-get install git python3-rosdep python3-rosinstall python3-rosinstall-generator python3-wstool build-essential -y
     else
         exit
-        echo "error"
     fi
 
     # Initialize rosdep
@@ -124,9 +124,8 @@ if [ "$ROS_VERSION" = "melodic" ] || [ "$ROS_VERSION" = "noetic" ] ; then
     echo "Finish Install ROS1"
     tput sgr0
 
-    echo "source /opt/ros/${ROS_VERSION}/setup.bash" >> ~/.bashrc
+    grep -q -F 'source /opt/ros/melodic/setup.bash' ~/.bashrc || echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
     source ~/.bashrc
-    
 else
     exit
 fi
