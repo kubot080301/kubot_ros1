@@ -5,9 +5,9 @@ tput setaf 2
 echo "Create WIFI ap host"
 tput sgr0
 
-HOST_NAME = kubot_ap
-PASSWORD = kubot_ap
-IP = 192.168.5.1
+HOST_NAME = "kubot_ap"
+PASSWORD = "kubot_ap"
+IP = "192.168.5.1"
 
 nmcli con add type wifi ifname wlan0 mode ap con-name kubot_ap ssid ${HOST_NAME}
 nmcli con modify kubot_ap 802-11-wireless.band bg
