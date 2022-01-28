@@ -124,7 +124,7 @@ if [ "$ROS_VERSION" = "melodic" ] || [ "$ROS_VERSION" = "noetic" ] ; then
     echo "Finish Install ROS1"
     tput sgr0
 
-    grep -q -F 'source /opt/ros/melodic/setup.bash' ~/.bashrc || echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+    grep -q -F 'source /opt/ros/${ROS_VERSION}/setup.bash' ~/.bashrc || echo "source /opt/ros/${ROS_VERSION}/setup.bash" >> ~/.bashrc
     source ~/.bashrc
 else
     exit
